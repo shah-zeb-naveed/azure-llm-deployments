@@ -1,0 +1,41 @@
+# # Service for backend container
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: backend-service
+# spec:
+#   selector:
+#     app: contoso-website
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#   type: LoadBalancer
+# ---
+# Service for UI container
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-service
+spec:
+  selector:
+    app: contoso-website
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+# # Service for nginx container
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-service
+# spec:
+#   selector:
+#     app: contoso-website
+#   ports:
+#     - protocol: TCP
+#       port: 443  # Assuming nginx listens on port 443 for HTTPS
+#       targetPort: 443
+#   type: LoadBalancer

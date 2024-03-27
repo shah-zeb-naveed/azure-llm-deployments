@@ -1,0 +1,3 @@
+shahzebapp.eastus.azurecontainer.io {
+    reverse_proxy http://localhost:5000
+}

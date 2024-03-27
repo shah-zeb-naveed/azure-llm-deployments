@@ -1,0 +1,50 @@
+name: container-group-name
+apiVersion: '2021-10-01'
+location: eastus
+tags: {}
+
+properties:
+  containers:
+    - name: container-name
+      properties:
+        image: ghcr.io/huggingface/text-generation-inference:1.4
+        ports:
+          - protocol: TCP
+            port: 80
+        environmentVariables:
+          - name: MODEL_ID
+            value: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0'
+        resources:
+          requests:
+            memoryInGB: 16
+            cpu: 4
+            gpu:
+              count: 2
+              sku: v100
+          limits:
+            memoryInGB: 16
+            cpu: 4
+            gpu:
+              count: 2
+              sku: v100
+        volumeMounts:
+        - name: data-volume
+          mountPath: /data
+          readOnly: false
+  imageRegistryCredentials: []
+  restartPolicy: Always
+  ipAddress:
+    ports:
+      - protocol: TCP
+        port: 80
+    type: Public
+  osType: Linux
+  volumes:
+    - name: data-volume
+      azureFile:
+        shareName: modeldata
+        readOnly: false
+        storageAccountName: mlshah4007047603
+        storageAccountKey: REDACTED
+  sku: Standard
+

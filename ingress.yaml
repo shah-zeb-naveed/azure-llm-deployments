@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-service
+  namespace: default  # Update the namespace if necessary
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: ui-service
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - my-service  # Update with your desired hostname
+      secretName: my-tls-secret  # Update with your TLS secret name
+  # rules:
+  #   - http:
+  #       paths:
+  #         - path: /
+  #           pathType: Exact
+  #           backend:
+  #             service:
+  #               name: ui-service  # Update with your UI service name
+  #               port:
+  #                 number: 80
+
+
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: my-ingress
+#   annotations:
+#     kubernetes.io/ingress.class: "nginx"   # Specify the NGINX Ingress Controller class
+# spec:
+#   tls:
+#     - secretName: my-tls-secret
+#   rules:
+#     - host: dummy-hostname.com
+#       http:
+#         paths:
+#           - path: /frontend
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: ui-service
+#                 port:
+#                   number: 80

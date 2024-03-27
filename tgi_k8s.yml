@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-website
+spec:
+  selector:
+    matchLabels:
+      app: contoso-website
+  template:
+    metadata:
+      labels:
+        app: contoso-website
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - image: ghcr.io/huggingface/text-generation-inference:1.4
+          name: tgi
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: MODEL_ID
+              value: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0'
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "0.8"
+            limits:
+              memory: "16Gi"
+              cpu: "0.8"
+          volumeMounts:
+            - mountPath: /data
+              name: volume
+              readOnly: false
+        - name: chatui
+          image: shahacr1.azurecr.io/chatui2:latest
+          ports:
+            - containerPort: 3000
+              name: ui
+          resources:
+            requests:
+              cpu: 0.1
+              memory: "1Gi"
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: modeldata-claim
+        - name: nginx-config-volume
+          secret:
+            secretName: nginx-config-secret
+      imagePullSecrets:
+        - name: acrsecret4
+
+
+        # - name: nginx-with-ssl
+        #   image: mcr.microsoft.com/oss/nginx/nginx:1.15.5-alpine
+        #   ports:
+        #     - containerPort: 443
+        #       protocol: TCP
+        #   resources:
+        #     requests:
+        #       cpu: 0.05
+        #       memory: 1Gi
+        #   volumeMounts:
+        #     - name: nginx-config-volume
+        #       mountPath: /etc/nginx

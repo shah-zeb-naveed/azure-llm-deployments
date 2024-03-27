@@ -1,0 +1,50 @@
+api-version: 2019-12-01
+location: eastus
+name: chatui-with-ssl
+properties:
+  containers:
+  - name: nginx-with-ssl
+    properties:
+      image: mcr.microsoft.com/oss/nginx/nginx:1.15.5-alpine
+      ports:
+      - port: 443
+        protocol: TCP
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 2
+      volumeMounts:
+      - name: nginx-config
+        mountPath: /etc/nginx
+  - name: chatui
+    properties:
+      image: shahacr1.azurecr.io/chatui2:latest
+      ports:
+      - port: 3000
+        protocol: TCP
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 2
+  volumes:
+  - secret:
+      ssl.crt: >
+        REDACTED
+      ssl.key: >
+        REDACTED
+      nginx.conf: >
+        REDACTED
+    name: nginx-config
+  ipAddress:
+    ports:
+    - port: 443
+      protocol: TCP
+    type: Public
+    dnsNameLabel: shahchatui
+  osType: Linux
+  imageRegistryCredentials:
+    - server: shahacr1.azurecr.io
+      username: shahacr1
+      password: REDACTED
+tags: null
+type: Microsoft.ContainerInstance/containerGroups

@@ -1,0 +1,68 @@
+name: shahzebapp
+apiVersion: "2021-10-01"
+location: eastus
+properties:
+  containers:
+    - name: reverse-proxy
+      properties:
+        image: caddy:2.6
+        ports:
+          - protocol: TCP
+            port: 80
+          - protocol: TCP
+            port: 443
+        resources:
+          requests:
+            memoryInGB: 1.0
+            cpu: 0.5
+          limits:
+            memoryInGB: 1.0
+            cpu: 0.5
+        volumeMounts:
+          - name: proxy-caddyfile
+            mountPath: /etc/caddy
+          - name: proxy-data
+            mountPath: /data
+          - name: proxy-config
+            mountPath: /config
+    - name: shahzebapp
+      properties:
+        image: mcr.microsoft.com/azuredocs/aci-helloworld
+        ports:
+        - port: 5000
+          protocol: TCP
+        environmentVariables:
+        - name: PORT
+          value: 5000
+        resources:
+          requests:
+            memoryInGB: 1.0
+            cpu: 1.0
+          limits:
+            memoryInGB: 1.0
+            cpu: 1.0
+  ipAddress:
+    ports:
+      - protocol: TCP
+        port: 80
+      - protocol: TCP
+        port: 443
+    type: Public        
+    dnsNameLabel: shahzebapp
+  osType: Linux
+  volumes:
+    - name: proxy-caddyfile
+      azureFile: 
+        shareName: proxy-caddyfile
+        storageAccountName: "shahstg1" 
+        storageAccountKey: REDACTED
+    - name: proxy-data
+      azureFile: 
+        shareName: proxy-data
+        storageAccountName: "shahstg1"  
+        storageAccountKey: REDACTED
+    - name: proxy-config
+      azureFile: 
+        shareName: proxy-config
+        storageAccountName: "shahstg1"  
+        storageAccountKey: REDACTED
