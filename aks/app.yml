@@ -51,17 +51,3 @@ spec:
             secretName: nginx-config-secret
       imagePullSecrets:
         - name: acrsecret4
-
-
-        # - name: nginx-with-ssl
-        #   image: mcr.microsoft.com/oss/nginx/nginx:1.15.5-alpine
-        #   ports:
-        #     - containerPort: 443
-        #       protocol: TCP
-        #   resources:
-        #     requests:
-        #       cpu: 0.05
-        #       memory: 1Gi
-        #   volumeMounts:
-        #     - name: nginx-config-volume
-        #       mountPath: /etc/nginx
