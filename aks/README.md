@@ -20,4 +20,4 @@ Reverse Proxy:
     - Caddy
   - K8S Nginx Ingress Controller
 
-Full guides published on Medium: https://medium.com/@shahzebnaveed
+Complete guidelines published on Medium: https://medium.com/@shahzebnaveed
